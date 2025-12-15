@@ -1,22 +1,8 @@
-# Linux Software Auto Installer (Menu Based)
+## 🚀 Linux Software Auto Installer
 
-Auto installer berbasis **menu interaktif**.  
-User cukup memilih nomor software yang ingin diinstall.
-
----
-
-## ✅ Supported OS
-- Ubuntu
-- Debian
-- Linux Mint
-- Pop!_OS
-- Turunan Ubuntu lainnya
-
----
-
-## 🚀 Cara Install (Sekali Enter)
-
-Jalankan perintah berikut:
-
+### Instalasi
 ```bash
-sudo curl -fsSL https://raw.githubusercontent.com/USERNAME/chrome-auto-installer/main/install.sh | bash
+git clone https://github.com/USERNAME/REPO.git
+cd REPO
+chmod +x install.sh
+sudo ./install.sh
