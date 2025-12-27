@@ -1,0 +1,247 @@
+====================================================================
+MATERI & TUTORIAL LENGKAP NEOFETCH + FASTFETCH (KALI / UBUNTU / LINUX)
+====================================================================
+
+A. PENGANTAR
+------------
+Neofetch dan Fastfetch adalah tool CLI untuk menampilkan:
+- ASCII logo distro (kiri)
+- Informasi sistem (kanan):
+  OS, Kernel, CPU, RAM, GPU, Disk, Uptime, dll
+
+Perbedaan utama:
+- Neofetch  : klasik, fleksibel, konfigurasi via shell
+- Fastfetch : modern, sangat cepat, konfigurasi berbasis JSON
+
+Keduanya otomatis mendeteksi distro OS.
+
+------------------------------------------------------------
+
+B. INSTALASI
+------------
+
+1. Neofetch
+-----------
+sudo apt update
+sudo apt install neofetch
+
+Jalankan:
+neofetch
+
+2. Fastfetch
+------------
+sudo apt install fastfetch
+
+Jalankan:
+fastfetch
+
+------------------------------------------------------------
+
+C. AUTO-RUN SAAT TERMINAL DIBUKA
+-------------------------------
+
+Edit bashrc:
+nano ~/.bashrc
+
+Tambahkan (pilih salah satu):
+neofetch
+atau
+fastfetch
+
+------------------------------------------------------------
+
+D. NEOFETCH – KONFIGURASI LENGKAP
+--------------------------------
+
+1. Lokasi config
+----------------
+~/.config/neofetch/config.conf
+
+Generate config:
+neofetch --generate
+
+Edit:
+nano ~/.config/neofetch/config.conf
+
+------------------------------------------------------------
+
+2. GANTI LOGO DISTRO
+-------------------
+ascii_distro="auto"
+ascii_distro="kali"
+ascii_distro="ubuntu"
+ascii_distro="arch"
+
+Custom file:
+ascii_source="$HOME/.config/neofetch/logo.txt"
+
+------------------------------------------------------------
+
+3. LOGO ASCII CUSTOM
+-------------------
+nano ~/.config/neofetch/logo.txt
+
+Contoh:
+  ██╗  ██╗ █████╗ ██╗
+  ██║ ██╔╝██╔══██╗██║
+  █████╔╝ ███████║██║
+  ██╔═██╗ ██╔══██║██║
+  ██║  ██╗██║  ██║███████╗
+  ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
+
+------------------------------------------------------------
+
+4. WARNA LOGO
+-------------
+ascii_colors=(1 1 1 1 1)   # merah
+ascii_colors=(4 4 4 4 4)   # biru
+ascii_colors=(2 2 2 2 2)   # hijau
+ascii_colors=(6 6 6 6 6)   # cyan
+
+------------------------------------------------------------
+
+5. SEMBUNYIKAN INFO
+------------------
+Di fungsi print_info():
+
+# info "GPU" gpu
+# info "Packages" packages
+# info "Resolution" resolution
+
+------------------------------------------------------------
+
+6. TAMBAH INFO DISK
+------------------
+info "Disk" disk
+info "Disk" disk --disk_show '/' --disk_percent
+
+------------------------------------------------------------
+
+E. FASTFETCH – KONFIGURASI LENGKAP
+---------------------------------
+
+1. Lokasi config
+----------------
+~/.config/fastfetch/config.jsonc
+
+Generate config:
+fastfetch --gen-config
+
+Edit:
+nano ~/.config/fastfetch/config.jsonc
+
+------------------------------------------------------------
+
+2. STRUKTUR DASAR CONFIG
+-----------------------
+{
+  "logo": {
+    "source": "auto",
+    "color": {
+      "1": "cyan"
+    }
+  },
+  "display": {
+    "separator": " → "
+  },
+  "modules": [
+    "os",
+    "kernel",
+    "uptime",
+    "cpu",
+    "gpu",
+    "memory",
+    "disk"
+  ]
+}
+
+------------------------------------------------------------
+
+3. GANTI LOGO FASTFETCH
+----------------------
+Gunakan logo distro:
+"logo": { "source": "kali" }
+
+Logo custom file:
+"logo": {
+  "source": "/home/user/.config/fastfetch/logo.txt"
+}
+
+------------------------------------------------------------
+
+4. LOGO ASCII FASTFETCH
+----------------------
+nano ~/.config/fastfetch/logo.txt
+
+(isi ASCII art bebas)
+
+------------------------------------------------------------
+
+5. WARNA LOGO FASTFETCH
+----------------------
+"logo": {
+  "source": "auto",
+  "color": {
+    "1": "blue",
+    "2": "cyan"
+  }
+}
+
+Warna tersedia:
+black, red, green, yellow, blue, magenta, cyan, white
+
+------------------------------------------------------------
+
+6. SEMBUNYIKAN / ATUR INFO
+-------------------------
+"modules": [
+  "os",
+  "cpu",
+  "memory"
+]
+
+Hapus modul lain untuk disembunyikan.
+
+------------------------------------------------------------
+
+7. FORMAT CUSTOM MODUL
+---------------------
+{
+  "type": "memory",
+  "key": "RAM",
+  "format": "{used} / {total}"
+}
+
+------------------------------------------------------------
+
+F. MODE MINIMAL
+---------------
+Neofetch:
+print_info() {
+  info "OS" os
+  info "CPU" cpu
+  info "RAM" memory
+}
+
+Fastfetch:
+"modules": ["os", "cpu", "memory"]
+
+------------------------------------------------------------
+
+G. COMMAND PENTING
+------------------
+neofetch --help
+fastfetch --help
+fastfetch --print-config
+
+------------------------------------------------------------
+
+KESIMPULAN
+----------
+✔ Keduanya auto-detect distro
+✔ Bisa full custom
+✔ Neofetch = fleksibel
+✔ Fastfetch = cepat & modern
+✔ Cocok Kali, Ubuntu, VM, WSL
+
+====================================================================
