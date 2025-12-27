@@ -1,35 +1,55 @@
 ====================================================================
-MATERI & TUTORIAL LENGKAP NEOFETCH + FASTFETCH (KALI / UBUNTU / LINUX)
+MATERI & TUTORIAL LENGKAP NEOFETCH + FASTFETCH
+(KALI / UBUNTU / DEBIAN / LINUX UMUM)
 ====================================================================
 
 A. PENGANTAR
 ------------
-Neofetch dan Fastfetch adalah tool CLI untuk menampilkan:
+Neofetch dan Fastfetch adalah tool CLI untuk menampilkan informasi
+sistem secara visual di terminal.
+
+Yang ditampilkan:
 - ASCII logo distro (kiri)
 - Informasi sistem (kanan):
-  OS, Kernel, CPU, RAM, GPU, Disk, Uptime, dll
+  OS, Kernel, CPU, RAM, GPU, Disk, Uptime, Shell, dll
 
 Perbedaan utama:
-- Neofetch  : klasik, fleksibel, konfigurasi via shell
-- Fastfetch : modern, sangat cepat, konfigurasi berbasis JSON
+- Neofetch
+  - Klasik & populer
+  - Konfigurasi via shell script
+  - Sudah tidak aktif dikembangkan
+- Fastfetch
+  - Modern & sangat cepat
+  - Konfigurasi berbasis JSON (jsonc)
+  - Aktif dikembangkan & direkomendasikan
 
-Keduanya otomatis mendeteksi distro OS.
+Catatan penting:
+- Kali Linux Rolling → neofetch DIHAPUS dari repo resmi
+- Fastfetch adalah pengganti resmi di Kali
 
 ------------------------------------------------------------
 
 B. INSTALASI
 ------------
 
-1. Neofetch
------------
+1. Neofetch (Ubuntu / Debian lama)
+---------------------------------
 sudo apt update
 sudo apt install neofetch
 
 Jalankan:
 neofetch
 
-2. Fastfetch
-------------
+Catatan:
+- Tidak tersedia di Kali Rolling terbaru
+- Jika error "Unable to locate package neofetch"
+  berarti repo memang tidak menyediakannya
+
+------------------------------------------------------------
+
+2. Fastfetch (Disarankan & Resmi Kali)
+-------------------------------------
+sudo apt update
 sudo apt install fastfetch
 
 Jalankan:
@@ -37,20 +57,101 @@ fastfetch
 
 ------------------------------------------------------------
 
-C. AUTO-RUN SAAT TERMINAL DIBUKA
--------------------------------
+C. PERMASALAHAN UMUM & SOLUSI
+----------------------------
 
-Edit bashrc:
-nano ~/.bashrc
+1. Error: Unable to locate package neofetch
+-------------------------------------------
+Penyebab:
+- Kali Linux Rolling menghapus neofetch dari repo
 
-Tambahkan (pilih salah satu):
-neofetch
-atau
-fastfetch
+Solusi:
+- Gunakan fastfetch (REKOMENDASI)
+- Atau install neofetch manual dari GitHub (tidak disarankan)
 
 ------------------------------------------------------------
 
-D. NEOFETCH – KONFIGURASI LENGKAP
+2. Fastfetch tidak muncul otomatis
+---------------------------------
+Penyebab PALING SERING:
+- Shell default di Kali adalah ZSH, bukan BASH
+- User salah edit ~/.bashrc
+
+Cek shell:
+echo $SHELL
+echo $0
+
+Jika hasil mengandung "zsh":
+→ gunakan ~/.zshrc
+Jika "bash":
+→ gunakan ~/.bashrc
+
+------------------------------------------------------------
+
+D. AUTO-RUN SAAT TERMINAL DIBUKA
+-------------------------------
+
+1. Jika menggunakan ZSH (Kali default)
+-------------------------------------
+Edit:
+nano ~/.zshrc
+
+Tambahkan (disarankan di bagian bawah):
+
+if command -v fastfetch >/dev/null 2>&1; then
+    fastfetch
+fi
+
+Tutup terminal → buka lagi
+
+------------------------------------------------------------
+
+2. Jika menggunakan BASH
+-----------------------
+Edit:
+nano ~/.bashrc
+
+PASTIKAN diletakkan SETELAH blok interaktif:
+
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+Tambahkan:
+
+if command -v fastfetch >/dev/null 2>&1; then
+    fastfetch
+fi
+
+------------------------------------------------------------
+
+E. FASTFETCH TIDAK HILANG SAAT CLEAR
+-----------------------------------
+
+Masalah:
+- Perintah `clear` / Ctrl+L menghapus tampilan fastfetch
+
+Solusi (ZSH):
+Override perintah clear
+
+Edit:
+nano ~/.zshrc
+
+Tambahkan di PALING BAWAH:
+
+clear() {
+    command clear
+    command -v fastfetch >/dev/null 2>&1 && fastfetch
+}
+
+Hasil:
+- fastfetch muncul saat buka terminal
+- fastfetch muncul lagi setelah clear
+
+------------------------------------------------------------
+
+F. NEOFETCH – KONFIGURASI LENGKAP
 --------------------------------
 
 1. Lokasi config
@@ -65,7 +166,7 @@ nano ~/.config/neofetch/config.conf
 
 ------------------------------------------------------------
 
-2. GANTI LOGO DISTRO
+2. Ganti logo distro
 -------------------
 ascii_distro="auto"
 ascii_distro="kali"
@@ -77,7 +178,7 @@ ascii_source="$HOME/.config/neofetch/logo.txt"
 
 ------------------------------------------------------------
 
-3. LOGO ASCII CUSTOM
+3. Logo ASCII custom
 -------------------
 nano ~/.config/neofetch/logo.txt
 
@@ -91,7 +192,7 @@ Contoh:
 
 ------------------------------------------------------------
 
-4. WARNA LOGO
+4. Warna logo
 -------------
 ascii_colors=(1 1 1 1 1)   # merah
 ascii_colors=(4 4 4 4 4)   # biru
@@ -100,7 +201,7 @@ ascii_colors=(6 6 6 6 6)   # cyan
 
 ------------------------------------------------------------
 
-5. SEMBUNYIKAN INFO
+5. Sembunyikan info
 ------------------
 Di fungsi print_info():
 
@@ -110,14 +211,14 @@ Di fungsi print_info():
 
 ------------------------------------------------------------
 
-6. TAMBAH INFO DISK
+6. Tambah info disk
 ------------------
 info "Disk" disk
 info "Disk" disk --disk_show '/' --disk_percent
 
 ------------------------------------------------------------
 
-E. FASTFETCH – KONFIGURASI LENGKAP
+G. FASTFETCH – KONFIGURASI LENGKAP
 ---------------------------------
 
 1. Lokasi config
@@ -132,7 +233,7 @@ nano ~/.config/fastfetch/config.jsonc
 
 ------------------------------------------------------------
 
-2. STRUKTUR DASAR CONFIG
+2. Struktur dasar config
 -----------------------
 {
   "logo": {
@@ -157,9 +258,9 @@ nano ~/.config/fastfetch/config.jsonc
 
 ------------------------------------------------------------
 
-3. GANTI LOGO FASTFETCH
+3. Ganti logo fastfetch
 ----------------------
-Gunakan logo distro:
+Logo distro:
 "logo": { "source": "kali" }
 
 Logo custom file:
@@ -169,15 +270,15 @@ Logo custom file:
 
 ------------------------------------------------------------
 
-4. LOGO ASCII FASTFETCH
+4. Logo ASCII fastfetch
 ----------------------
 nano ~/.config/fastfetch/logo.txt
 
-(isi ASCII art bebas)
+(Isi ASCII art bebas)
 
 ------------------------------------------------------------
 
-5. WARNA LOGO FASTFETCH
+5. Warna logo fastfetch
 ----------------------
 "logo": {
   "source": "auto",
@@ -188,11 +289,12 @@ nano ~/.config/fastfetch/logo.txt
 }
 
 Warna tersedia:
-black, red, green, yellow, blue, magenta, cyan, white
+black, red, green, yellow,
+blue, magenta, cyan, white
 
 ------------------------------------------------------------
 
-6. SEMBUNYIKAN / ATUR INFO
+6. Sembunyikan / atur info
 -------------------------
 "modules": [
   "os",
@@ -204,7 +306,7 @@ Hapus modul lain untuk disembunyikan.
 
 ------------------------------------------------------------
 
-7. FORMAT CUSTOM MODUL
+7. Format custom modul
 ---------------------
 {
   "type": "memory",
@@ -214,7 +316,7 @@ Hapus modul lain untuk disembunyikan.
 
 ------------------------------------------------------------
 
-F. MODE MINIMAL
+H. MODE MINIMAL
 ---------------
 Neofetch:
 print_info() {
@@ -228,20 +330,21 @@ Fastfetch:
 
 ------------------------------------------------------------
 
-G. COMMAND PENTING
-------------------
+I. COMMAND PENTING
+-----------------
 neofetch --help
 fastfetch --help
 fastfetch --print-config
+fastfetch --gen-config
 
 ------------------------------------------------------------
 
 KESIMPULAN
 ----------
-✔ Keduanya auto-detect distro
-✔ Bisa full custom
-✔ Neofetch = fleksibel
-✔ Fastfetch = cepat & modern
-✔ Cocok Kali, Ubuntu, VM, WSL
+✔ Neofetch & Fastfetch auto-detect distro
+✔ Kali Linux → Fastfetch adalah pilihan resmi
+✔ Fastfetch lebih cepat & modern
+✔ Bisa autorun + sticky saat clear
+✔ Cocok untuk Kali, Ubuntu, VM, WSL, Server
 
 ====================================================================
